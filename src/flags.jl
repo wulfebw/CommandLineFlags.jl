@@ -50,14 +50,18 @@ function Base.getindex(flags::Flags, key::String)
     return flags.d[key].value
 end
 
-function Base.setindex!(flags::Flags, value::Any, key::String)
-    set_value!(flags.d[key], value)
-end
-
 function add_entry!(flags::Flags, key::String, value::Any, 
         datatype::DataType, description::String = "")
     entry = Entry(key, value, datatype, description)
     flags.d[entry.key] = entry
+end
+
+function Base.setindex!(flags::Flags, value::Any, key::String)
+    if in(key, flags.d)
+        set_value!(flags.d[key], value)
+    else
+        add_entry!(flags, key, value, typeof(value))
+    end
 end
 
 function Base.show(io::IO, flags::Flags)
