@@ -57,7 +57,7 @@ function add_entry!(flags::Flags, key::String, value::Any,
 end
 
 function Base.setindex!(flags::Flags, value::Any, key::String)
-    if in(key, flags.d)
+    if in(key, keys(flags.d))
         set_value!(flags.d[key], value)
     else
         add_entry!(flags, key, value, typeof(value))
